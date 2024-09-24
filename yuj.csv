@@ -1,0 +1,36 @@
+Symptom,Yoga Asanas,Pressure Points,Notes,Age Range,Gender
+Back Pain,"Child's Pose; Downward Dog; Cat-Cow; Bridge Pose",BL23; BL25; GV4,null,30-65,All
+Headache,"Seated Forward Bend; Child's Pose; Legs Up the Wall",LI4; GB20; GV20,null,15-65,All
+Anxiety,"Corpse Pose; Seated Forward Bend; Legs Up the Wall",PC6; HT7; Yintang,mental,15-65,All
+Insomnia,"Legs Up the Wall; Corpse Pose; Reclining Bound Angle",HT7; Anmian; KD6,mental,15-65,All
+Digestive Issues,"Seated Twist; Wind-Relieving Pose; Cobra Pose",ST36; CV12; LI4,null,20-65,All
+Menstrual Cramps,"Reclining Bound Angle; Cat-Cow; Child's Pose",SP6; CV4; LV3,Gender-specific,12-50,Female
+Fatigue,"Mountain Pose; Cobra Pose; Child's Pose",ST36; CV6; KD3,null,15-65,All
+Neck Pain,"Cat-Cow; Ear to Shoulder Stretch; Child's Pose",GB20; BL10; SI3,null,20-65,All
+Depression,"Bridge Pose; Cobra Pose; Warrior I",GV20; BL43; HT7,mental,15-65,All
+High Blood Pressure,"Corpse Pose; Forward Bend; Seated Forward Bend",LI4; KD1; LV3,Could be serious,30-70,All
+Cold and Sinusitis,"Bridge Pose; Plow Pose; Supported Shoulderstand",LI20; ST3; GV23,null,15-65,All
+Asthma,"Cobra Pose; Seated Forward Bend; Bridge Pose",LU1; BL13; CV17,Could be serious,10-65,All
+Joint Pain,"Cat-Cow; Downward Dog; Butterfly Pose",ST36; LI4; SP9,Could be serious,40-75,All
+Obesity,"Warrior II; Chair Pose; Bridge Pose",ST36; CV6; LI4,null,18-65,All
+Fatigue (Chronic),"Legs Up the Wall; Supported Fish Pose; Child's Pose",CV6; ST36; KD3,Could be serious,20-65,All
+Heart Palpitations,"Corpse Pose; Forward Bend; Fish Pose",PC6; HT7; CV17,Could be serious,30-70,All
+Severe Chest Pain,"Cobra Pose; Child's Pose",CV17; LU1; PC6,Could be serious,30-80,All
+Diabetes Management,"Seated Forward Bend; Warrior II; Mountain Pose",ST36; LI4; SP6,null,30-70,All
+Thyroid Issues,"Bridge Pose; Fish Pose; Seated Forward Bend",CV22; TH5; PC6,Could be serious,20-65,All
+Postpartum Recovery,"Child's Pose; Reclining Bound Angle; Cat-Cow",SP6; CV4; KD3,Gender-specific,0-12 months post-birth,Female
+Menopause Symptoms,"Supported Fish Pose; Forward Bend; Legs Up the Wall",HT7; SP6; PC6,Gender-specific,45-65,Female
+Adolescent Growth Pains,"Butterfly Pose; Child's Pose; Seated Forward Bend",ST36; KD3; LI4,Age-specific,12-18,All
+Arthritis,"Cat-Cow; Child's Pose; Supported Bridge Pose",SP9; LI4; TH5,Could be serious,40-80,All
+Osteoporosis,"Chair Pose; Bridge Pose; Warrior II",BL23; BL25; GV4,Could be serious,60-80,All
+Fibromyalgia,"Child's Pose; Supported Fish Pose; Seated Forward Bend",ST36; CV6; HT7,Could be serious,30-65,All
+Chronic Pain,"Cat-Cow; Gentle Twists; Bridge Pose",LI4; SP6; ST36,Could be serious,20-70,All
+Stress,"Legs Up the Wall; Corpse Pose; Seated Forward Bend",PC6; HT7; Yintang,mental,15-65,All
+Hyperthyroidism,"Cobra Pose; Fish Pose; Seated Forward Bend",CV22; TH5; PC6,Could be serious,20-65,All
+Hypothyroidism,"Supported Fish Pose; Forward Bend; Legs Up the Wall",HT7; SP6; PC6,Could be serious,20-65,All
+Chronic Fatigue Syndrome,"Legs Up the Wall; Supported Child's Pose; Seated Forward Bend",CV6; ST36; KD3,Could be serious,20-60,All
+PMS Symptoms,"Reclining Bound Angle; Child's Pose; Seated Forward Bend",SP6; CV4; LV3,Gender-specific,12-50,Female
+Gastroesophageal Reflux Disease (GERD),"Seated Forward Bend; Child's Pose; Cat-Cow",ST36; CV12; LI4,Could be serious,20-65,All
+Irritable Bowel Syndrome (IBS),"Wind-Relieving Pose; Seated Twist; Cat-Cow",ST36; CV12; LI4,Could be serious,20-65,All
+Post-Traumatic Stress Disorder (PTSD),"Corpse Pose; Seated Forward Bend; Legs Up the Wall",PC6; HT7; Yintang,mental,15-65,All
+Skin Issues (e.g., eczema),"Child's Pose; Bridge Pose; Seated Forward Bend",SP6; LI4; CV6,null,15-65,All
