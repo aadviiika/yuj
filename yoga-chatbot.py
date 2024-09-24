@@ -17,41 +17,50 @@ def get_closest_symptom(user_symptom, symptoms_list):
     closest_match = process.extractOne(user_symptom, symptoms_list)
     return closest_match[0] if closest_match else None
 
-def suggest_treatments(symptom, age, gender):
+def suggest_treatments(symptoms, age, gender):
     if knowledge_base is None:
         return None, None, "Knowledge base not available. Unable to provide suggestions."
 
-    symptom_normalized = normalize_input(symptom)
+    symptoms_normalized = [normalize_input(symptom) for symptom in symptoms]
     symptoms_list = knowledge_base['Symptom'].tolist()  # Keep original case for checking
 
-    # Directly check for exact match of abbreviation or full name
-    for s in symptoms_list:
-        if symptom_normalized == s.lower() or symptom_normalized in s.lower():
-            closest_symptom = s
-            break
-    else:
-        # If no match found, find the closest matching symptom using fuzzy matching
-        closest_symptom = get_closest_symptom(symptom_normalized, symptoms_list)
+    recommendations = {}
+    
+    for symptom_normalized in symptoms_normalized:
+        # Directly check for exact match of abbreviation or full name
+        closest_symptom = None
+        for s in symptoms_list:
+            if symptom_normalized == s.lower() or symptom_normalized in s.lower():
+                closest_symptom = s
+                break
+        
+        if closest_symptom is None:
+            # If no match found, find the closest matching symptom using fuzzy matching
+            closest_symptom = get_closest_symptom(symptom_normalized, symptoms_list)
 
-    if closest_symptom is None:
-        return None, None, "I'm sorry, I couldn't find any suggestions for that symptom."
+        if closest_symptom is None:
+            recommendations[symptom_normalized] = "I'm sorry, I couldn't find any suggestions for that symptom."
+        else:
+            # Filter the knowledge base for the given closest symptom
+            suggestions = knowledge_base[knowledge_base['Symptom'] == closest_symptom]
+            asanas = suggestions['Yoga Asanas'].values[0].split('; ')
+            pressure_points = suggestions['Pressure Points'].values[0].split('; ')
+            notes = suggestions['Notes'].values[0]
 
-    # Filter the knowledge base for the given closest symptom
-    suggestions = knowledge_base[knowledge_base['Symptom'] == closest_symptom]
+            # Check for serious conditions
+            serious_conditions = ['could be serious', 'mental']
+            if isinstance(notes, str) and any(condition in notes.lower() for condition in serious_conditions):
+                notes_message = "Note: If you're experiencing severe symptoms, please seek professional help."
+            else:
+                notes_message = None
 
-    # Extract asanas and pressure points
-    asanas = suggestions['Yoga Asanas'].values[0].split('; ')
-    pressure_points = suggestions['Pressure Points'].values[0].split('; ')
-    notes = suggestions['Notes'].values[0]
+            recommendations[closest_symptom] = {
+                'asanas': asanas,
+                'pressure_points': pressure_points,
+                'notes_message': notes_message
+            }
 
-    # Check for serious conditions
-    serious_conditions = ['could be serious', 'mental']
-    if isinstance(notes, str) and any(condition in notes.lower() for condition in serious_conditions):
-        notes_message = "Note: If you're experiencing severe symptoms, please seek professional help."
-    else:
-        notes_message = None
-
-    return asanas, pressure_points, notes_message
+    return recommendations
 
 # Start chatbot interaction
 def chat_with_bot():
@@ -60,21 +69,29 @@ def chat_with_bot():
         return
 
     while True:
-        symptom = input("Describe your symptoms (e.g., back pain, headache, anxiety). Type 'quit', 'bye', or 'end' to exit.\nYou: ")
-        if symptom.lower() in ['quit', 'bye', 'end']:
+        symptom_input = input("Describe your symptoms (e.g., back pain, headache, anxiety). Type 'quit', 'bye', or 'end' to exit.\nYou: ")
+        if symptom_input.lower() in ['quit', 'bye', 'end']:
             break
         age = input("Please enter your age: ")
         gender = input("Please specify your gender (girl, female, boy, male, other, etc.): ")
 
-        asanas, pressure_points, notes_message = suggest_treatments(symptom, age, gender)
+        # Split input by common delimiters (like 'and' and ',') and remove extra spaces
+        symptoms = [s.strip() for s in symptom_input.replace(',', ' and ').split(' and ')]
 
-        if asanas is None:
-            print(notes_message)
-        else:
-            print(f"### Recommended Yoga Asanas:\n\n- " + "\n- ".join(asanas))
-            print(f"\n### Recommended Acupressure Points:\n\n- " + "\n- ".join(pressure_points))
-            if notes_message:
-                print(f"\n{notes_message}")
+        recommendations = suggest_treatments(symptoms, age, gender)
+
+        for symptom, recommendation in recommendations.items():
+            if isinstance(recommendation, str):
+                print(f"For '{symptom}': {recommendation}")
+            else:
+                asanas = recommendation['asanas']
+                pressure_points = recommendation['pressure_points']
+                notes_message = recommendation['notes_message']
+                
+                print(f"### Recommended Yoga Asanas for '{symptom}':\n\n- " + "\n- ".join(asanas))
+                print(f"\n### Recommended Acupressure Points for '{symptom}':\n\n- " + "\n- ".join(pressure_points))
+                if notes_message:
+                    print(f"\n{notes_message}")
 
         # Additional note at the end of each response
         print("\nIf symptoms persist or get unbearable, please seek professional help.")
