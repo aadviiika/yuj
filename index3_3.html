@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yuj</title>
+    <link rel="icon" href="C:\Users\NITHISHA\Downloads\Designer (3).png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #chatContainer {
+            width: 60%;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: none; /* Initially hidden */
+        }
+
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .botMessage {
+            background-color: #e0f7fa;
+        }
+
+        .userMessage {
+            background-color: #c8e6c9;
+            text-align: right;
+        }
+
+        #inputArea {
+            display: flex;
+            margin-top: 20px;
+        }
+
+        #inputField {
+            flex: 1;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-right: 10px;
+        }
+
+        #submitButton {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #submitButton:hover {
+            background-color: #45a049;
+        }
+
+        #results {
+            margin-top: 20px;
+        }
+
+        .welcome-screen {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .welcome-screen h1 {
+            position: absolute;
+            color: white;
+            font-size: 4rem;
+            z-index: 1;
+        }
+
+        .background-image {
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .chatbot-screen {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .welcome-screen {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background-image: url('C:/Users/NITHISHA/Downloads/u022IFiLzhlKgGyf3WZN--1--5sch1.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+        }
+
+        .welcome-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Black transparent layer for divine look */
+            z-index: 1;
+        }
+
+        .welcome-screen h1 {
+            z-index: 2; /* Ensures the text appears on top of the layer */
+            font-size: 5rem;
+            font-family: 'Playfair Display', serif; /* Elegant font */
+            color: #FFD700; /* Gold color for elegance */
+            letter-spacing: 5px; /* Slightly reduced for a more cohesive look */
+            text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.7); /* Softer glow effect */
+            margin: 0;
+            padding: 0 20px;
+            text-align: center;
+            margin-left: 5%;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f3f7f0; /* Light greenish background for a holistic feel */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Welcome Header */
+
+
+        .resultItem {
+    background-color: #f0f0f0; /* Light grey background for results */
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px 0; /* Space between results */
+}
+
+
+    </style>
+</head>
+<body>
+
+    <div id="welcome-screen" class="welcome-screen">
+        <h1>Welcome to Yoga</h1>
+        <img src="C:/Users/NITHISHA/Downloads/u022IFiLzhlKgGyf3WZN--1--5sch1.jpg" alt="Welcome Image" class="background-image">
+    </div>
+
+
+    
+    <div id="chatContainer">
+        <div id="chatArea">
+            <div class="message botMessage">Hello! Please describe your symptoms.</div>
+        </div>
+        <div id="inputArea">
+            <input type="text" id="inputField" placeholder="Enter symptoms..." />
+            <button id="submitButton">Submit</button>
+        </div>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const chatContainer = document.getElementById('chatContainer');
+
+        // Add click event listener to the welcome screen
+        welcomeScreen.addEventListener('click', function() {
+            welcomeScreen.style.display = 'none'; // Hide the welcome screen
+            chatContainer.style.display = 'block'; // Show the chat container
+        });
+        
+
+        let step = 0;
+        let userDetails = {};
+        const chatArea = document.getElementById('chatArea');
+        const inputField = document.getElementById('inputField');
+        const submitButton = document.getElementById('submitButton');
+        const resultsDiv = document.getElementById('results');
+        // Example knowledgeBase
+        const knowledgeBase = [
+        {
+        "Symptom": "Back Pain",
+        "Yoga Asanas": "Child's Pose; Downward Dog; Cat-Cow; Bridge Pose",
+        "Pressure Points": "BL23; BL25; GV4",
+        "Notes": "Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "30-65",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Headache",
+        "Yoga Asanas": "Seated Forward Bend; Child's Pose; Legs Up the Wall",
+        "Pressure Points": "LI4; GB20; GV20",
+        "Notes": "Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "15-65",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Anxiety",
+        "Yoga Asanas": "Corpse Pose; Seated Forward Bend; Legs Up the Wall",
+        "Pressure Points": "PC6; HT7; Yintang",
+        "Notes": "Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "15-65",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Insomnia",
+        "Yoga Asanas": "Legs Up the Wall; Corpse Pose; Reclining Bound Angle",
+        "Pressure Points": "HT7; Anmian; KD6",
+        "Notes": "Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "15-65",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Digestive Issues",
+        "Yoga Asanas": "Seated Twist; Wind-Relieving Pose; Cobra Pose",
+        "Pressure Points": "ST36; CV12; LI4",
+        "Notes": "Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "20-65",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Menstrual Cramps",
+        "Yoga Asanas": "Reclining Bound Angle; Cat-Cow; Child's Pose",
+        "Pressure Points": "SP6; CV4; LV3",
+        "Notes": "Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "12-50",
+        "Gender": "Female"
+      },
+      {
+        "Symptom": "Fatigue",
+        "Yoga Asanas": "Mountain Pose; Cobra Pose; Child's Pose",
+        "Pressure Points": "ST36; CV6; KD3",
+        "Notes": "Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "15-65",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Neck Pain",
+        "Yoga Asanas": "Cat-Cow; Ear to Shoulder Stretch; Child's Pose",
+        "Pressure Points": "GB20; BL10; SI3",
+        "Notes": "Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "20-65",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Depression",
+        "Yoga Asanas": "Bridge Pose; Cobra Pose; Warrior I",
+        "Pressure Points": "GV20; BL43; HT7",
+        "Notes": "Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "15-65",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "High Blood Pressure",
+        "Yoga Asanas": "Corpse Pose; Forward Bend; Seated Forward Bend",
+        "Pressure Points": "LI4; KD1; LV3",
+        "Notes": "Could be serious. Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "30-70",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Cold and Sinusitis",
+        "Yoga Asanas": "Bridge Pose; Plow Pose; Supported Shoulderstand",
+        "Pressure Points": "LI20; ST3; GV23",
+        "Notes": "Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "15-65",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Asthma",
+        "Yoga Asanas": "Cobra Pose; Seated Forward Bend; Bridge Pose",
+        "Pressure Points": "LU1; BL13; CV17",
+        "Notes": "Could be serious. Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "10-65",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Joint Pain",
+        "Yoga Asanas": "Cat-Cow; Downward Dog; Butterfly Pose",
+        "Pressure Points": "ST36; LI4; SP9",
+        "Notes": "Could be serious. Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "40-75",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Obesity",
+        "Yoga Asanas": "Warrior II; Chair Pose; Bridge Pose",
+        "Pressure Points": "ST36; CV6; LI4",
+        "Notes": "Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "18-65",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Fatigue (Chronic)",
+        "Yoga Asanas": "Legs Up the Wall; Supported Fish Pose; Child's Pose",
+        "Pressure Points": "CV6; ST36; KD3",
+        "Notes": "Could be serious. Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "20-65",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Heart Palpitations",
+        "Yoga Asanas": "Corpse Pose; Forward Bend; Fish Pose",
+        "Pressure Points": "PC6; HT7; CV17",
+        "Notes": "Could be serious. Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "30-70",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Severe Chest Pain",
+        "Yoga Asanas": "Cobra Pose; Child's Pose",
+        "Pressure Points": "CV17; LU1; PC6",
+        "Notes": "Could be serious. Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "30-80",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Diabetes Management",
+        "Yoga Asanas": "Seated Forward Bend; Warrior II; Mountain Pose",
+        "Pressure Points": "ST36; LI4; SP6",
+        "Notes": "Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "30-70",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Thyroid Issues",
+        "Yoga Asanas": "Bridge Pose; Fish Pose; Seated Forward Bend",
+        "Pressure Points": "CV22; TH5; PC6",
+        "Notes": "Could be serious. Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "20-65",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Postpartum Recovery",
+        "Yoga Asanas": "Child's Pose; Reclining Bound Angle; Cat-Cow",
+        "Pressure Points": "SP6; CV4; KD3",
+        "Notes": "Age below 2 and above 95 is invalid.",
+        "Age Range": "0-12 months post-birth",
+        "Gender": "Female"
+      },
+      {
+        "Symptom": "Menopause Symptoms",
+        "Yoga Asanas": "Supported Fish Pose; Forward Bend; Legs Up the Wall",
+        "Pressure Points": "HT7; SP6; PC6",
+        "Notes": "Gender-specific. Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "45-65",
+        "Gender": "Female"
+      },
+      {
+        "Symptom": "Adolescent Growth Pains",
+        "Yoga Asanas": "Butterfly Pose; Child's Pose; Seated Forward Bend",
+        "Pressure Points": "ST36; KD3; LI4",
+        "Notes": "Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "12-18",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Arthritis",
+        "Yoga Asanas": "Cat-Cow; Child's Pose; Supported Bridge Pose",
+        "Pressure Points": "SP9; LI4; TH5",
+        "Notes": "Could be serious. Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "40-80",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Osteoporosis",
+        "Yoga Asanas": "Chair Pose; Bridge Pose; Warrior II",
+        "Pressure Points": "BL23; BL25; GV4",
+        "Notes": "Could be serious. Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "60-80",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Fibromyalgia",
+        "Yoga Asanas": "Child's Pose; Supported Fish Pose; Seated Forward Bend",
+        "Pressure Points": "ST36; CV6; HT7",
+        "Notes": "Could be serious. Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "30-65",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Chronic Pain",
+        "Yoga Asanas": "Cat-Cow; Gentle Twists; Bridge Pose",
+        "Pressure Points": "LI4; SP6; ST36",
+        "Notes": "Could be serious. Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "20-70",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Stress",
+        "Yoga Asanas": "Legs Up the Wall; Corpse Pose; Seated Forward Bend",
+        "Pressure Points": "PC6; HT7; Yintang",
+        "Notes": "Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "15-65",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Hyperthyroidism",
+        "Yoga Asanas": "Cobra Pose; Fish Pose; Seated Forward Bend",
+        "Pressure Points": "CV22; TH5; PC6",
+        "Notes": "Could be serious. Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "20-65",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Hypothyroidism",
+        "Yoga Asanas": "Supported Fish Pose; Forward Bend; Legs Up the Wall",
+        "Pressure Points": "HT7; SP6; PC6",
+        "Notes": "Could be serious. Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "20-65",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Chronic Fatigue Syndrome",
+        "Yoga Asanas": "Legs Up the Wall; Supported Child's Pose; Seated Forward Bend",
+        "Pressure Points": "CV6; ST36; KD3",
+        "Notes": "Could be serious. Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "20-60",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "PMS Symptoms",
+        "Yoga Asanas": "Reclining Bound Angle; Child's Pose; Seated Forward Bend",
+        "Pressure Points": "SP6; CV4; LV3",
+        "Notes": "Gender-specific. Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "12-50",
+        "Gender": "Female"
+      },
+      {
+        "Symptom": "Gastroesophageal Reflux Disease (GERD)",
+        "Yoga Asanas": "Seated Forward Bend; Child's Pose; Cat-Cow",
+        "Pressure Points": "ST36; CV12; LI4",
+        "Notes": "Could be serious. Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "20-65",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Irritable Bowel Syndrome (IBS)",
+        "Yoga Asanas": "Wind-Relieving Pose; Seated Twist; Cat-Cow",
+        "Pressure Points": "ST36; CV12; LI4",
+        "Notes": "Could be serious. Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "20-65",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Post-Traumatic Stress Disorder (PTSD)",
+        "Yoga Asanas": "Corpse Pose; Seated Forward Bend; Legs Up the Wall",
+        "Pressure Points": "PC6; HT7; Yintang",
+        "Notes": "Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range": "15-65",
+        "Gender": "All"
+      },
+      {
+        "Symptom": "Skin Issues (e.g.eczema)",
+        "Yoga Asanas": "Child's Pose; Bridge Pose; Seated Forward Bend",
+        "Pressure Points": "SP6; LI4; CV6",
+        "Notes": "Recommended for seniors. Age below 2 and above 95 is invalid.",
+        "Age Range":  "15-65",
+        "Gender": "All"
+      }
+        ];
+
+
+
+
+
+        welcomeScreen.addEventListener('click', function() {
+        welcomeScreen.style.display = 'none'; // Hide the welcome screen
+        chatContainer.style.display = 'block'; // Show the chat container
+        startChat(); // Start the chat process
+    });
+
+    // Function to start the chat and ask for symptoms
+    function startChat() {
+        const initialMessage = document.createElement('div');
+        initialMessage.classList.add('message', 'botMessage');
+        
+        chatArea.appendChild(initialMessage); // Display initial bot message
+        chatArea.scrollTop = chatArea.scrollHeight; // Scroll to the bottom
+    }
+
+    // Function to process the user's symptom input
+    function processInput() {
+        const userInput = inputField.value.trim(); // Get the user input
+        if (!userInput) return; // Do nothing if input is empty
+
+        // Create user message
+        const userMessage = document.createElement('div');
+        userMessage.classList.add('message', 'userMessage');
+        userMessage.textContent = userInput;
+        chatArea.appendChild(userMessage); // Display user message
+
+        // Check for exit command
+        if (userInput.toLowerCase() === 'exit') {
+            const exitMessage = document.createElement('div');
+            exitMessage.classList.add('message', 'botMessage');
+            exitMessage.textContent = "Goodbye!";
+            chatArea.appendChild(exitMessage); // Display goodbye message
+            chatArea.scrollTop = chatArea.scrollHeight; // Scroll to the bottom
+            inputField.disabled = true; // Disable input field
+            submitButton.disabled = true; // Disable submit button
+            return; // Exit the function to stop further processing
+        }
+
+        // Find matching symptom in the knowledge base
+        const response = knowledgeBase.find(entry => entry.Symptom.toLowerCase() === userInput.toLowerCase());
+
+        if (response) {
+            // Create bot response with recommendations
+            const botMessage = document.createElement('div');
+            botMessage.classList.add('message', 'botMessage');
+            botMessage.innerHTML = `
+                <strong>Recommended Yoga Asanas:</strong> ${response["Yoga Asanas"]}<br>
+                <strong>Pressure Points:</strong> ${response["Pressure Points"]}<br>
+                <strong>Notes:</strong> ${response["Notes"]}
+            `;
+            chatArea.appendChild(botMessage); // Display bot message
+        } else {
+            // Create bot response for unknown symptoms
+            const botMessage = document.createElement('div');
+            botMessage.classList.add('message', 'botMessage');
+            botMessage.textContent = "Sorry, I don't have recommendations for that symptom.";
+            chatArea.appendChild(botMessage); // Display bot message
+        }
+
+        // Clear the input field for the next entry
+        inputField.value = '';
+        chatArea.scrollTop = chatArea.scrollHeight; // Scroll to the bottom
+
+        // Ask for another symptom
+        askForAnotherSymptom();
+    }
+
+    // Function to ask for another symptom
+    function askForAnotherSymptom() {
+        const askMessage = document.createElement('div');
+        askMessage.classList.add('message', 'botMessage');
+        askMessage.textContent = "Please tell me another symptom or type 'exit' to end the chat.";
+        chatArea.appendChild(askMessage); // Display ask message
+        chatArea.scrollTop = chatArea.scrollHeight; // Scroll to the bottom
+    }
+
+    // Add click event listener to the submit button
+    submitButton.addEventListener('click', processInput);
+
+    // Add event listener for 'Enter' key to submit input
+    inputField.addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            processInput(); // Call the processInput function on Enter key press
+        }
+    });
+
+    </script>
+</body>
+</html>
